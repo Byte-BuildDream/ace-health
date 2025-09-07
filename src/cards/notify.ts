@@ -9,7 +9,7 @@ export function createNotifyCard({
   content?: string;
   atMobiles?: string[];
   isAtAll?: boolean;
-  color?: 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'cyan' | 'purple';
+  color?: 'carmine'|'orange'|'wathet'|'turquoose'|'green'|'yellow'| 'red'| 'violet'|'purple'|'indigo'|'grey'| 'default'| 'blue';
 }) {
   // 构建 @ 提醒的文本片段
   const atSegments = [

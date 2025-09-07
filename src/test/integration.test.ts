@@ -14,6 +14,21 @@ test('integration: should send real feishu card successfully', async () => {
     return;
   }
 
+const colors = [
+  'carmine',
+  'orange',
+  'wathet',
+  'turquoose',
+  'green',
+  'yellow',
+  'red',
+  'violet',
+  'purple',
+  'indigo',
+  'grey',
+  'default',
+  'blue',
+] as const; // 👈 关键！告诉 TS：这不是 string[]，而是每个元素都是字面量！
   // 准备测试数据（发到你自己 or 测试群）
   const result = await createNotifyCard({
     title: '🧪 集成测试卡片',
@@ -23,7 +38,19 @@ test('integration: should send real feishu card successfully', async () => {
   });
 
 
+
+
   await sendFeishuCard(result);
+
+  for (let i = 0; i < colors.length; i++ ) {
+    await sendFeishuCard(createNotifyCard({
+      title: '🧪 集成测试卡片',
+      content: '这是一条由 **Bun 集成测试** 自动发送的真实卡片，请忽略。' + colors[i],
+      atMobiles: [], // 不@人，避免骚扰
+      color: colors[i],
+    }));
+
+  }
   // ✅ 基础断言：确保返回了卡片对象
   // expect(result).toBeDefined();
   // expect(result.title).toBe('🧪 集成测试卡片');

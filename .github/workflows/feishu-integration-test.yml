@@ -2,7 +2,6 @@
 
 name: Feishu Integration Test
 
-# 触发条件：推送到 main/develop 分支，或针对 main 的 PR
 on:
   push:
     branches: [ main, develop ]
@@ -10,7 +9,7 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: read  # 最小权限原则
+  contents: read
 
 jobs:
   test:
@@ -23,22 +22,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24.7.0'
-          cache: 'bun'  # 可选：缓存 bun 依赖加速
+          # ❌ 移除 cache: 'bun' —— 它不支持！
 
       - name: 🍞 Install Bun
         run: |
           curl -fsSL https://bun.sh/install | bash
           echo "$HOME/.bun/bin" >> $GITHUB_PATH
 
+      # 👇 手动缓存 node_modules（基于 bun.lockb）
+      - name: 📦 Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
       - name: 📦 Install dependencies
         run: bun install
+        # 如果命中缓存，这一步会非常快
 
       - name: 🧪 Run Feishu Integration Test
         env:
           FEISHU_INTEGRATION_TEST: "1"
-          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}  # 🔐 从 Secrets 读取
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
         run: |
-          # 可选：调试用（测试通过后建议删除或注释掉）
-          # echo "Webhook URL is set: ${FEISHU_WEBHOOK_URL:+✅ Yes}"
-          
           bun test test/integration.test.ts

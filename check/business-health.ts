@@ -1,6 +1,7 @@
-import axios from "axios"
+import axios from "axios";
 import { sendFeishuCard } from '../src/utils/sendCard';
 import { createNotifyCard } from '../src/cards/notify';
+
 interface resbody {
     "status": string
     "health_score": number,
@@ -8,23 +9,17 @@ interface resbody {
     "failed_functions": null
 }
 
-
-
-
-export async function sendCardForBusinessHealth(res : string) {
-     const card = createNotifyCard({
-                title: '⚠️警告',
-                content: `前端出现异常错误: **${res}**\n时间 ${new Date().toLocaleString()} `,
-                atMobiles: ['<at id=all>'], // 替换为你想@的人手机号
-                color: 'red',
+export async function sendCardForBusinessHealth(res: string) {
+    const card = createNotifyCard({
+        title: '⚠️警告',
+        content: `前端出现异常错误: **${res}**\n时间 ${new Date().toLocaleString()}`,
+        atMobiles: ['<at id=all>'],
+        color: 'red',
     });
-
     await sendFeishuCard(card);
 }
 
-
 export async function health(url: string): Promise<resbody> {
-
     try {
         const res = await axios.get(url);
         return res.data;
@@ -40,9 +35,6 @@ export async function health(url: string): Promise<resbody> {
     }
 }
 
-
-
-
 export async function main() {
     try {
         const result = await health('http://playace.cn/api/business-health');
@@ -51,13 +43,11 @@ export async function main() {
             console.log("业务健康状态正常");
         } else {
             sendCardForBusinessHealth("无法访问业务API");
-        
         }
     } catch (e) {
         console.error("主函数错误:", e.message);
     }
-
-
 }
 
-main();
+// 设置定时任务，每1000毫秒（即1秒）运行一次 main 函数
+setInterval(main, 10000);

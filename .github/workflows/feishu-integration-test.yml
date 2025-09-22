@@ -4,9 +4,9 @@ name: Feishu Integration Test
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ dev, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ dev ]
 
 permissions:
   contents: read

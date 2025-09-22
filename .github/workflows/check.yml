@@ -1,6 +1,6 @@
 # .github/workflows/feishu-integration-test.yml
 
-name: Feishu Integration Test
+name: 定时测试健康值
 
 on:
   push:

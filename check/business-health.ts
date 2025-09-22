@@ -12,7 +12,7 @@ interface resbody {
 export async function sendCardForBusinessHealth(res: string) {
     const card = createNotifyCard({
         title: '⚠️警告',
-        content: `前端出现异常错误: **${res}**\n时间 ${new Date().toLocaleString()}`,
+        content: `前端与数据库CRUD出现异常错误: **${res}**\n时间 ${new Date().toLocaleString()}`,
         atMobiles: ['<at id=all>'],
         color: 'red',
     });

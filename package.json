@@ -1,14 +1,20 @@
 {
   "name": "feishu-card-scripts",
-  "module": "index.ts",
+  "version": "1.0.0",
+  "description": "一个用于创建飞书卡片的工具库",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/node": "^24.3.1",
-    "tsx": "^4.20.5"
+  "scripts": {
+    "build": "bun run tsc",
+    "prepublishOnly": "bun run build"
   },
-  "peerDependencies": {
+  "files": [
+    "dist"
+  ],
+  "author": "Zerokaze",
+  "license": "MIT",
+  "devDependencies": {
     "typescript": "^5.9.2"
   },
   "dependencies": {

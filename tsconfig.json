@@ -1,29 +1,31 @@
 {
   "compilerOptions": {
-    // Environment setup & latest features
+    // 设置编译目标
     "lib": ["ESNext"],
-    "target": "ESNext",
-    "module": "Preserve",
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
-    "allowJs": true,
+    "target": "ES2022", // 推荐使用一个较新的ES版本，如 ES2022
+    "module": "ESNext", // 推荐使用 ESNext 或 NodeNext，以便现代打包工具处理
+    "rootDir": "./src", // 你的源代码目录
+    "outDir": "./dist", // 输出目录，这是发布库所必需的
 
-    // Bundler mode
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
+    // 启用类型声明文件
+    "declaration": true, // 核心！生成 .d.ts 文件
+    "declarationMap": true, // 可选：生成 .d.ts.map，方便调试
 
-    // Best practices
-    "strict": true,
-    "skipLibCheck": true,
+    // 模块解析
+    "moduleResolution": "node", // 兼容性更好，更适合库的打包
+
+    // 启用严格模式
+    "strict": true, // 强烈推荐开启所有严格类型检查
+    "noUnusedLocals": true, // 发现未使用的本地变量
+    "noUnusedParameters": true, // 发现未使用的函数参数
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
 
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
-  }
+    // 其他选项
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+  },
+  "include": ["src/**/*"] // 只编译 src 目录下的文件
 }

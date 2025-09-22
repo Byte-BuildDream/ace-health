@@ -1,0 +1,49 @@
+# .github/workflows/feishu-integration-test.yml
+
+name: Feishu Integration Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '*/10 * * * *' # 👈 Add this line to run every 10 minutes
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: ⚙️ Setup Node.js v24.7.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.7.0'
+
+      - name: 🍞 Install Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+
+      - name: 📦 Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: 📦 Install dependencies
+        run: bun install
+        
+      - name: 🧪 Run Feishu Integration Test
+        env:
+          FEISHU_INTEGRATION_TEST: "1"
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+        run: |
+          bun run check/business-health.ts
